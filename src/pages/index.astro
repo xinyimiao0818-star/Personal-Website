@@ -1,0 +1,765 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+type Language = "zh" | "en";
+
+type Experience = {
+  org: string;
+  role: string;
+  period: string;
+  logo?: string;
+  scene: string;
+  method: string;
+  result: string;
+  tags: string[];
+  archive?: {
+    slug: string;
+    label: string;
+    status: string;
+  };
+};
+
+type FitItem = {
+  title: string;
+  body: string;
+};
+
+type EducationItem = {
+  school: string;
+  program: string;
+  period: string;
+  image: string;
+  body: string;
+  tags: string[];
+};
+
+type LifeItem = {
+  title: string;
+  image: string;
+  body: string;
+};
+
+type PortfolioPage = {
+  lang: Language;
+  nav: {
+    intro: string;
+    education: string;
+    internships: string;
+    campus: string;
+    fit: string;
+    life: string;
+    contact: string;
+  };
+  hero: {
+    eyebrow: string;
+    name: string;
+    accent: string;
+    role: string;
+    school: string;
+    email: string;
+    keywords: string[];
+  };
+  education: {
+    title: string;
+    copy: string;
+    items: EducationItem[];
+  };
+  internships: {
+    title: string;
+    copy: string;
+    labels: {
+      scene: string;
+      method: string;
+      result: string;
+    };
+    items: Experience[];
+  };
+  campus: {
+    title: string;
+    copy: string;
+    labels: {
+      scene: string;
+      method: string;
+      result: string;
+    };
+    items: Experience[];
+  };
+  fit: {
+    title: string;
+    copy: string;
+    items: FitItem[];
+  };
+  life: {
+    title: string;
+    copy: string;
+    items: LifeItem[];
+  };
+  contact: {
+    title: string;
+    links: Array<{ label: string; href: string }>;
+  };
+  footer: string;
+};
+
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const withBase = (path: string) => `${base}${path.replace(/^\//, "")}`;
+
+const pages: PortfolioPage[] = [
+  {
+    lang: "zh",
+    nav: {
+      intro: "简介",
+      education: "教育",
+      internships: "实习",
+      campus: "校园",
+      fit: "匹配",
+      life: "生活",
+      contact: "联系"
+    },
+    hero: {
+      eyebrow: "PERSONAL PORTFOLIO / STRATEGY, INSIGHT, CONTENT",
+      name: "缪",
+      accent: "欣怡",
+      role: "咨询与商业洞察方向 / 会计学 BBA / 内容与消费观察",
+      school: "香港中文大学（深圳）｜会计学 BBA｜2027 届",
+      email: "miamiaoxy@outlook.com",
+      keywords: ["Analyst", "Observer", "Storyteller"]
+    },
+    education: {
+      title: "Education",
+      copy:
+        "两段学习经历构成了我的商业基础和国际视角：一段在深圳的经管训练，一段在法国商学院的交换学习。",
+      items: [
+        {
+          school: "CUHK-Shenzhen",
+          program: "香港中文大学（深圳）｜会计学 BBA｜2027 届",
+          period: "2023 - 2027",
+          image: "/images/education-cuhksz.jpg",
+          body:
+            "在经管学院学习会计与商业基础，也通过新闻社和学院传播工作持续接触校园内容、活动与组织协作。",
+          tags: ["Business", "Accounting", "SME"]
+        },
+        {
+          school: "ESSEC Business School",
+          program: "交换学习｜Strategy / Luxury Management / Consumer Psychology",
+          period: "2025",
+          image: "/images/education-essec.jpg",
+          body:
+            "在 ESSEC 补充战略、奢侈品管理和消费者心理相关课程，把品牌、消费与跨文化语境放在一起观察。",
+          tags: ["Strategy", "Luxury", "Consumer"]
+        }
+      ]
+    },
+    internships: {
+      title: "Internships",
+      copy:
+        "四段实习都和“理解业务问题、拆解信息、形成判断”有关。我按业务场景、方法和产出呈现，方便快速抓住每段经历的重点。",
+      labels: {
+        scene: "业务场景",
+        method: "方法",
+        result: "产出"
+      },
+      items: [
+        {
+          org: "Bosch Management Consulting",
+          role: "内部咨询实习生",
+          period: "2025.12 - Present",
+          logo: "/logos/bosch.svg",
+          scene: "支持 BSH 全球研发组织变革，推动前沿技术能力向集中式 Tech Hub 重构。",
+          method:
+            "围绕 AI、Robotics 等跨品类共性技术，开展 20+ 内外部专家访谈，梳理组织边界、流程和协同机制。",
+          result:
+            "沉淀组织设计、创新流程优化和全球落地路线图，支持管理层对后续推广形成共识。",
+          tags: ["组织战略", "AI / Robotics", "专家访谈", "路线图"],
+          archive: { slug: "bosch", label: "查看资料", status: "待上传" }
+        },
+        {
+          org: "BCG 波士顿咨询",
+          role: "兼职咨询助理",
+          period: "2025.08 - 2025.12",
+          logo: "/logos/bcg.svg",
+          scene: "为零食领军企业设计二次增长曲线与新业务战略。",
+          method:
+            "结合案头研究、专家访谈和近 3 年蝉妈妈电商数据，拆解品类竞争格局、渠道机会和爆发玩家增长动因。",
+          result:
+            "识别 8-10 个代表性高增长玩家，提炼产品创新、营销策略和组织协同对增长的影响。",
+          tags: ["电商数据", "增长战略", "竞品研究", "蝉妈妈"],
+          archive: { slug: "bcg", label: "查看资料", status: "待上传" }
+        },
+        {
+          org: "Kantar 凯度咨询",
+          role: "快消市场洞察与分析咨询实习生",
+          period: "2025.05 - 2025.08",
+          logo: "/logos/kantar.svg",
+          scene: "支持酒店、饮料、家电等行业的消费者洞察和市场分析。",
+          method:
+            "参与 7 场入户深访，分析 20,000+ 问卷，使用 SPSS / Excel 完成定量分析和消费者分群。",
+          result:
+            "为 Hilton、Coca-Cola 等客户输出新品概念、传播重心、服务改进和产品设计建议。",
+          tags: ["消费者洞察", "问卷分析", "SPSS", "快消"],
+          archive: { slug: "kantar", label: "查看资料", status: "待上传" }
+        },
+        {
+          org: "众华企业管理咨询",
+          role: "并购咨询助理实习生",
+          period: "2024.06 - 2024.08",
+          logo: "/logos/zhonghua.svg",
+          scene: "参与并购与融资相关的商业尽调和财务分析工作。",
+          method:
+            "整理行业资料、访谈纪要和公司经营数据，支持收入预测、商业模式判断和尽调报告撰写。",
+          result:
+            "参与完成 8 份商业尽调报告，协助团队梳理目标公司的增长逻辑、风险点和交易判断。",
+          tags: ["商业尽调", "财务分析", "访谈纪要", "M&A"],
+          archive: { slug: "zhonghua", label: "查看资料", status: "待上传" }
+        }
+      ]
+    },
+    campus: {
+      title: "Campus & Projects",
+      copy:
+        "除了实习，我也保留了两段更能体现自主研究和内容表达的校园经历：一段偏战略案例，一段偏长期内容运营。",
+      labels: {
+        scene: "主题",
+        method: "参与",
+        result: "产出"
+      },
+      items: [
+        {
+          org: "Bain 杯启航咨询案例大赛",
+          role: "参赛队员",
+          period: "2025.05",
+          scene: "围绕 AI + 可再生能源，研究虚拟电厂（VPP）市场和能源管理平台机会。",
+          method:
+            "拆解产业链、客户场景和价值创造方式，设计 AI SaaS 平台商业模式，并完成财务预测与风险评估。",
+          result:
+            "形成从市场判断、产品定位到商业可行性的完整案例输出，训练了从零搭建问题框架的能力。",
+          tags: ["战略案例", "VPP", "AI SaaS", "财务预测"],
+          archive: { slug: "bain-cup", label: "查看资料", status: "已整理" }
+        },
+        {
+          org: "CUHKSZ 经管学院推广及传讯部",
+          role: "学生助理 / 新闻社主编",
+          period: "2023.09 - Present",
+          scene: "运营学院公众号等内容阵地，负责人物专访、活动回顾和品牌传播。",
+          method:
+            "策划并发布 100+ 篇文章，优化内容定位、标题和传播策略，组织 School Day 等品牌活动。",
+          result:
+            "单篇推文阅读量稳定突破 3,000+，同类推文阅读提升 50%，品牌活动覆盖 10,000+ 人次。",
+          tags: ["内容运营", "社媒传播", "用户阅读", "品牌活动"],
+          archive: { slug: "news-society", label: "查看资料", status: "已整理" }
+        }
+      ]
+    },
+    fit: {
+      title: "Position Fit",
+      copy:
+        "如果对应平台商业化战略或内容生态相关岗位，我的经历可以转化为三类直接可用的能力。",
+      items: [
+        {
+          title: "咨询式研究与组织拆解",
+          body:
+            "在 Bosch Management Consulting 的全球研发组织变革项目中，围绕 AI / Robotics Tech Hub 的组织定位、协同机制与落地路径，参与专家访谈、信息梳理和路线图整理，形成面向管理层讨论的结构化材料。"
+        },
+        {
+          title: "消费与广告观察",
+          body:
+            "在 Kantar 消费者研究中参与访谈、问卷分析和基础数据处理；在 BCG 消费品项目中接触增长、营销与渠道变量拆解。相关经历帮助我从用户场景、传播触点和业务目标之间建立更清晰的理解。"
+        },
+        {
+          title: "内容平台使用与运营经验",
+          body:
+            "在学院社媒运营中长期参与选题、标题、采访与发布节奏管理；同时作为小红书重度用户，对平台内容形态、搜索习惯和种草语境保持持续观察。"
+        }
+      ]
+    },
+    life: {
+      title: "Life & Interests",
+      copy: "",
+      items: [
+        {
+          title: "Foodie",
+          image: "/images/life-food-collage.jpg",
+          body: "喜欢从餐厅、菜单和城市小店里观察消费选择，也认真享受好吃的东西。"
+        },
+        {
+          title: "Travel",
+          image: "/images/life-travel-rome.jpg",
+          body: "旅行时会记录街区、店铺和人的状态，很多观察来自日常场景。"
+        },
+        {
+          title: "Study",
+          image: "/images/life-study-plugin.png",
+          body: "学习用 AI 搭建工具和整理信息，也在尝试把对话、资料和想法变成可复用的工作流。"
+        }
+      ]
+    },
+    contact: {
+      title: "Keep in touch.",
+      links: [
+        { label: "Email", href: "mailto:miamiaoxy@outlook.com" },
+        { label: "Experience", href: "#internships-zh" }
+      ]
+    },
+    footer: "PERSONAL PORTFOLIO / MIAO XINYI"
+  },
+  {
+    lang: "en",
+    nav: {
+      intro: "Intro",
+      education: "Education",
+      internships: "Internships",
+      campus: "Campus",
+      fit: "Fit",
+      life: "Life",
+      contact: "Contact"
+    },
+    hero: {
+      eyebrow: "PERSONAL PORTFOLIO / STRATEGY, INSIGHT, CONTENT",
+      name: "Xinyi",
+      accent: "Miao",
+      role: "Consulting, business insight, and content platform observation",
+      school: "The Chinese University of Hong Kong, Shenzhen | BBA in Professional Accountancy | Class of 2027",
+      email: "miamiaoxy@outlook.com",
+      keywords: ["Analyst", "Observer", "Storyteller"]
+    },
+    education: {
+      title: "Education",
+      copy:
+        "Two learning experiences shape my business foundation and international perspective.",
+      items: [
+        {
+          school: "CUHK-Shenzhen",
+          program: "BBA in Professional Accountancy | Class of 2027",
+          period: "2023 - 2027",
+          image: "/images/education-cuhksz.jpg",
+          body:
+            "At SME, CUHK-Shenzhen, I built a foundation in accounting and business while staying involved in school communication and content work.",
+          tags: ["Business", "Accounting", "SME"]
+        },
+        {
+          school: "ESSEC Business School",
+          program: "Exchange | Strategy / Luxury Management / Consumer Psychology",
+          period: "2025",
+          image: "/images/education-essec.jpg",
+          body:
+            "At ESSEC, I explored strategy, luxury management, and consumer psychology through a more international business-school setting.",
+          tags: ["Strategy", "Luxury", "Consumer"]
+        }
+      ]
+    },
+    internships: {
+      title: "Internships",
+      copy:
+        "Four internships connected by one through-line: understanding business questions, structuring information, and turning analysis into usable output.",
+      labels: {
+        scene: "Context",
+        method: "Method",
+        result: "Output"
+      },
+      items: [
+        {
+          org: "Bosch Management Consulting",
+          role: "Internal Consulting Intern",
+          period: "2025.12 - Present",
+          logo: "/logos/bosch.svg",
+          scene: "Supported a global R&D organization transformation for BSH.",
+          method:
+            "Conducted 20+ expert interviews around AI, Robotics, Tech Hub scope, operating model, and innovation processes.",
+          result:
+            "Synthesized organization design, process optimization, and rollout roadmap insights for management discussion.",
+          tags: ["Organization strategy", "AI / Robotics", "Expert interviews", "Roadmap"],
+          archive: { slug: "bosch", label: "View archive", status: "Pending" }
+        },
+        {
+          org: "Boston Consulting Group",
+          role: "Part-time Assistant Consulting Intern",
+          period: "2025.08 - 2025.12",
+          logo: "/logos/bcg.svg",
+          scene: "Designed second-curve growth and new-business strategy for a leading snack brand.",
+          method:
+            "Combined desk research, expert interviews, and three years of Chanmama e-commerce data to map category dynamics and breakout players.",
+          result:
+            "Identified 8-10 high-growth players and distilled product innovation, marketing, and organization growth drivers.",
+          tags: ["E-commerce data", "Growth strategy", "Competitor research", "Chanmama"],
+          archive: { slug: "bcg", label: "View archive", status: "Pending" }
+        },
+        {
+          org: "Kantar",
+          role: "FMCG Market Analysis and Insights Consulting Intern",
+          period: "2025.05 - 2025.08",
+          logo: "/logos/kantar.svg",
+          scene: "Supported consumer insight and market analysis across hospitality, beverages, and home appliances.",
+          method:
+            "Joined 7 in-home interviews, analyzed 20,000+ survey responses, and used SPSS / Excel for segmentation.",
+          result:
+            "Delivered recommendations for clients including Hilton and Coca-Cola on product concepts, messaging, and service improvements.",
+          tags: ["Consumer insight", "Survey analysis", "SPSS", "FMCG"],
+          archive: { slug: "kantar", label: "View archive", status: "Pending" }
+        },
+        {
+          org: "Zhonghua Enterprise Management Consulting",
+          role: "M&A Assistant Consulting Intern",
+          period: "2024.06 - 2024.08",
+          logo: "/logos/zhonghua.svg",
+          scene: "Supported commercial due diligence and financial analysis for M&A and financing projects.",
+          method:
+            "Consolidated industry research, interview notes, and operating data to support revenue forecast and business model assessment.",
+          result:
+            "Contributed to 8 commercial due diligence reports and helped summarize growth logic, risks, and transaction implications.",
+          tags: ["CDD", "Financial analysis", "Interview notes", "M&A"],
+          archive: { slug: "zhonghua", label: "View archive", status: "Pending" }
+        }
+      ]
+    },
+    campus: {
+      title: "Campus & Projects",
+      copy:
+        "Two campus experiences show a more self-driven side: one in strategy case work, one in long-term content operations.",
+      labels: {
+        scene: "Topic",
+        method: "Work",
+        result: "Output"
+      },
+      items: [
+        {
+          org: "Bain Cup Consulting Case Competition",
+          role: "Team member",
+          period: "2025.05",
+          scene: "Studied the AI + renewable energy opportunity around virtual power plants.",
+          method:
+            "Mapped the value chain, customer scenarios, and business model of an AI SaaS energy-management platform.",
+          result:
+            "Built an end-to-end case output covering market judgement, product positioning, financial forecast, and risk assessment.",
+          tags: ["Strategy case", "VPP", "AI SaaS", "Forecast"],
+          archive: { slug: "bain-cup", label: "View archive", status: "Curated" }
+        },
+        {
+          org: "SME, CUHKSZ",
+          role: "Student Assistant / Editor-in-Chief",
+          period: "2023.09 - Present",
+          scene: "Operated school social media channels and brand communication.",
+          method:
+            "Planned and published 100+ articles, interviews, and event recaps; optimized positioning, headlines, and distribution strategy.",
+          result:
+            "Posts consistently exceeded 3,000 views; similar posts saw a 50% view increase; brand events reached 10,000+ people.",
+          tags: ["Content operations", "Social media", "Branding", "Audience"],
+          archive: { slug: "news-society", label: "View archive", status: "Curated" }
+        }
+      ]
+    },
+    fit: {
+      title: "Position Fit",
+      copy:
+        "For platform commercialization or content ecosystem roles, my experience can be translated into three practical directions.",
+      items: [
+        {
+          title: "Consulting-style research",
+          body:
+            "In the Bosch Management Consulting project, I supported global R&D organization transformation around the positioning, collaboration model, and rollout path of an AI / Robotics Tech Hub."
+        },
+        {
+          title: "Consumer and advertising observation",
+          body:
+            "Kantar gave me exposure to interviews, survey analysis, and basic data work; BCG added perspective on consumer goods growth, marketing, and channel variables."
+        },
+        {
+          title: "Content platform usage and operations",
+          body:
+            "My school social media work covered topics, headlines, interviews, and publishing rhythm. As a heavy Xiaohongshu user, I also keep observing its content formats, search habits, and seeding context."
+        }
+      ]
+    },
+    life: {
+      title: "Life & Interests",
+      copy: "",
+      items: [
+        {
+          title: "Foodie",
+          image: "/images/life-food-collage.jpg",
+          body: "Food is both pleasure and a small window into consumer choices."
+        },
+        {
+          title: "Travel",
+          image: "/images/life-travel-rome.jpg",
+          body: "I like observing cities, stores, and people through everyday scenes."
+        },
+        {
+          title: "Study",
+          image: "/images/life-study-plugin.png",
+          body: "I am learning to build tools with AI and turn conversations, materials, and ideas into reusable workflows."
+        }
+      ]
+    },
+    contact: {
+      title: "Keep in touch.",
+      links: [
+        { label: "Email", href: "mailto:miamiaoxy@outlook.com" },
+        { label: "Experience", href: "#internships-en" }
+      ]
+    },
+    footer: "PERSONAL PORTFOLIO / MIAO XINYI"
+  }
+];
+
+const labels = Object.fromEntries(pages.map((page) => [page.lang, page.nav])) as Record<
+  Language,
+  PortfolioPage["nav"]
+>;
+---
+
+<BaseLayout
+  title="缪欣怡 - Personal Portfolio"
+  description="缪欣怡的个人经历展示页，包含咨询、消费者洞察、内容运营和生活兴趣。"
+>
+  <div class="site-shell portfolio-shell">
+    <header class="topbar">
+      <a class="brand" href={withBase("/")}>Xinyi Miao</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#intro-zh" data-section-anchor="intro">
+          <span data-lang-text="zh">{labels.zh.intro}</span>
+          <span data-lang-text="en" hidden>{labels.en.intro}</span>
+        </a>
+        <a href="#education-zh" data-section-anchor="education">
+          <span data-lang-text="zh">{labels.zh.education}</span>
+          <span data-lang-text="en" hidden>{labels.en.education}</span>
+        </a>
+        <a href="#internships-zh" data-section-anchor="internships">
+          <span data-lang-text="zh">{labels.zh.internships}</span>
+          <span data-lang-text="en" hidden>{labels.en.internships}</span>
+        </a>
+        <a href="#campus-zh" data-section-anchor="campus">
+          <span data-lang-text="zh">{labels.zh.campus}</span>
+          <span data-lang-text="en" hidden>{labels.en.campus}</span>
+        </a>
+        <a href="#fit-zh" data-section-anchor="fit">
+          <span data-lang-text="zh">{labels.zh.fit}</span>
+          <span data-lang-text="en" hidden>{labels.en.fit}</span>
+        </a>
+        <a href="#life-zh" data-section-anchor="life">
+          <span data-lang-text="zh">{labels.zh.life}</span>
+          <span data-lang-text="en" hidden>{labels.en.life}</span>
+        </a>
+        <a href="#contact-zh" data-section-anchor="contact">
+          <span data-lang-text="zh">{labels.zh.contact}</span>
+          <span data-lang-text="en" hidden>{labels.en.contact}</span>
+        </a>
+      </nav>
+      <div class="language-toggle" aria-label="Language">
+        <button type="button" data-language-button="zh" aria-pressed="true">中</button>
+        <button type="button" data-language-button="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    {
+      pages.map((page) => (
+        <main data-lang-panel={page.lang} hidden={page.lang !== "zh"}>
+          <section class="hero portfolio-hero" id={`intro-${page.lang}`}>
+            <div class="hero-copy">
+              <div>
+                <p class="eyebrow">{page.hero.eyebrow}</p>
+                <h1 class="hero-title portfolio-title">
+                  {page.hero.name}<span>{page.hero.accent}</span>
+                </h1>
+                <p class="hero-role">{page.hero.role}</p>
+                <div class="keyword-row" aria-label="Portfolio keywords">
+                  {page.hero.keywords.map((keyword) => <span class="keyword-item">{keyword}</span>)}
+                </div>
+              </div>
+              <div class="hero-footer">
+                <p>{page.hero.school}</p>
+                <a class="button-link" href={`mailto:${page.hero.email}`}>{page.hero.email}</a>
+              </div>
+            </div>
+            <div class="hero-media">
+              <img src={withBase("/images/hero-xinyi.jpg")} alt="Xinyi in the mountains" />
+            </div>
+          </section>
+
+          <section class="section education-section" id={`education-${page.lang}`} aria-labelledby={`education-heading-${page.lang}`}>
+            <div class="section-heading">
+              <h2 id={`education-heading-${page.lang}`}>{page.education.title}</h2>
+              <p class="section-copy">{page.education.copy}</p>
+            </div>
+            <div class="education-grid">
+              {page.education.items.map((item, index) => (
+                <article class="education-card">
+                  <div class="education-image">
+                    <img src={withBase(item.image)} alt={`${item.school} campus`} />
+                  </div>
+                  <div class="education-body">
+                    <span class="education-index">0{index + 1}</span>
+                    <p class="archive-meta">{item.period}</p>
+                    <h3>{item.school}</h3>
+                    <strong>{item.program}</strong>
+                    <p>{item.body}</p>
+                    <div class="tag-row">
+                      {item.tags.map((tag) => <span>{tag}</span>)}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="section internships-section" id={`internships-${page.lang}`} aria-labelledby={`internships-heading-${page.lang}`}>
+            <div class="section-heading">
+              <h2 id={`internships-heading-${page.lang}`}>{page.internships.title}</h2>
+              <p class="section-copy">{page.internships.copy}</p>
+            </div>
+            <div class="experience-list">
+              {page.internships.items.map((item, index) => (
+                <article class="experience-entry">
+                  <span class="archive-number">0{index + 1}</span>
+                  <div class="archive-meta">
+                    {item.logo && <img class="experience-logo" src={withBase(item.logo)} alt={`${item.org} logo`} />}
+                    <div>{item.period}</div>
+                    <div>{item.role}</div>
+                  </div>
+                  <div class="experience-body">
+                    <h3>{item.org}</h3>
+                    <dl>
+                      <div>
+                        <dt>{page.internships.labels.scene}</dt>
+                        <dd>{item.scene}</dd>
+                      </div>
+                      <div>
+                        <dt>{page.internships.labels.method}</dt>
+                        <dd>{item.method}</dd>
+                      </div>
+                      <div>
+                        <dt>{page.internships.labels.result}</dt>
+                        <dd>{item.result}</dd>
+                      </div>
+                    </dl>
+                    <div class="tag-row">
+                      {item.tags.map((tag) => <span>{tag}</span>)}
+                    </div>
+                    {item.archive && (
+                      <div class="archive-link-row">
+                        <a class="archive-link" href={withBase(`/work/${item.archive.slug}/`)}>
+                          {item.archive.label}
+                        </a>
+                        <span>{item.archive.status}</span>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="section campus-section" id={`campus-${page.lang}`} aria-labelledby={`campus-heading-${page.lang}`}>
+            <div class="section-heading">
+              <h2 id={`campus-heading-${page.lang}`}>{page.campus.title}</h2>
+              <p class="section-copy">{page.campus.copy}</p>
+            </div>
+            <div class="experience-list campus-list">
+              {page.campus.items.map((item, index) => (
+                <article class="experience-entry campus-entry">
+                  <span class="archive-number">0{index + 1}</span>
+                  <div class="archive-meta">
+                    <div>{item.period}</div>
+                    <div>{item.role}</div>
+                  </div>
+                  <div class="experience-body">
+                    <h3>{item.org}</h3>
+                    <dl>
+                      <div>
+                        <dt>{page.campus.labels.scene}</dt>
+                        <dd>{item.scene}</dd>
+                      </div>
+                      <div>
+                        <dt>{page.campus.labels.method}</dt>
+                        <dd>{item.method}</dd>
+                      </div>
+                      <div>
+                        <dt>{page.campus.labels.result}</dt>
+                        <dd>{item.result}</dd>
+                      </div>
+                    </dl>
+                    <div class="tag-row">
+                      {item.tags.map((tag) => <span>{tag}</span>)}
+                    </div>
+                    {item.archive && (
+                      <div class="archive-link-row">
+                        <a class="archive-link" href={withBase(`/work/${item.archive.slug}/`)}>
+                          {item.archive.label}
+                        </a>
+                        <span>{item.archive.status}</span>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="section fit-section" id={`fit-${page.lang}`} aria-labelledby={`fit-heading-${page.lang}`}>
+            <div class="section-heading">
+              <h2 id={`fit-heading-${page.lang}`}>{page.fit.title}</h2>
+              <div class="fit-heading-content">
+                <p class="section-copy">{page.fit.copy}</p>
+                <div class="fit-brand" aria-label={page.lang === "zh" ? "小红书" : "Xiaohongshu"}>
+                  <img
+                    class="fit-logo"
+                    src={withBase("/logos/xiaohongshu.png")}
+                    alt={page.lang === "zh" ? "小红书 logo" : "Xiaohongshu logo"}
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="fit-grid">
+              {page.fit.items.map((item, index) => (
+                <article class="fit-card">
+                  <span class="fit-index">0{index + 1}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="section life-section" id={`life-${page.lang}`} aria-labelledby={`life-heading-${page.lang}`}>
+            <div class="section-heading">
+              <h2 id={`life-heading-${page.lang}`}>{page.life.title}</h2>
+              {page.life.copy && <p class="section-copy">{page.life.copy}</p>}
+            </div>
+            <div class="life-gallery">
+              {page.life.items.map((item, index) => (
+                <article class="life-item">
+                  <img src={withBase(item.image)} alt={item.title} />
+                  <div class="life-caption">
+                    <span>0{index + 1}</span>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.body}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="section" id={`contact-${page.lang}`}>
+            <div class="contact-panel">
+              <h2>{page.contact.title}</h2>
+              <div class="contact-links">
+                {page.contact.links.map((link) => (
+                  <a class="button-link" href={link.href}>{link.label}</a>
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+      ))
+    }
+
+    <footer class="footer">
+      <span>MIAO XINYI</span>
+      <span>
+        <span data-lang-text="zh">{pages[0].footer}</span>
+        <span data-lang-text="en" hidden>{pages[1].footer}</span>
+      </span>
+    </footer>
+  </div>
+</BaseLayout>

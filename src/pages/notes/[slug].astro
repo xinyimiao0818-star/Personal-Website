@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+type Language = "zh" | "en";
+type NoteModule = {
+  frontmatter: Record<string, any>;
+  Content: any;
+};
+
+const languages: Language[] = ["zh", "en"];
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const withBase = (path: string) => `${base}${path.replace(/^\//, "")}`;
+export function getStaticPaths() {
+  const noteModules = Object.values(
+    import.meta.glob<NoteModule>("../../content/notes/*.md", { eager: true })
+  );
+  const grouped = noteModules.reduce<Record<string, NoteModule[]>>((acc, note) => {
+    const slug = note.frontmatter.group;
+    acc[slug] = acc[slug] || [];
+    acc[slug].push(note);
+    return acc;
+  }, {});
+
+  return Object.entries(grouped).map(([slug, entries]) => ({
+    params: { slug },
+    props: { entries }
+  }));
+}
+
+const { entries } = Astro.props as { entries: NoteModule[] };
+const entriesByLang = Object.fromEntries(
+  entries.map((entry) => [entry.frontmatter.lang, entry])
+) as Record<Language, NoteModule>;
+const primary = entriesByLang.zh ?? entriesByLang.en;
+---
+
+<BaseLayout title={`${primary.frontmatter.title} - Xinyi`}>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href={withBase("/")}>Xinyi</a>
+      <nav class="nav" aria-label="Note navigation">
+        <a href={withBase("/#about")}>
+          <span data-lang-text="zh">关于</span>
+          <span data-lang-text="en" hidden>About</span>
+        </a>
+        <a href={withBase("/#archive")}>
+          <span data-lang-text="zh">档案</span>
+          <span data-lang-text="en" hidden>Archive</span>
+        </a>
+        <a href={withBase("/#notes")}>
+          <span data-lang-text="zh">思考</span>
+          <span data-lang-text="en" hidden>Notes</span>
+        </a>
+      </nav>
+      <div class="language-toggle" aria-label="Language">
+        <button type="button" data-language-button="zh" aria-pressed="true">中</button>
+        <button type="button" data-language-button="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    {
+      languages.map((lang) => {
+        const entry = entriesByLang[lang] ?? primary;
+        const Content = entry.Content;
+        return (
+          <main class="article" data-lang-panel={lang} hidden={lang !== "zh"}>
+            <header class="article-header">
+              <p class="eyebrow">{entry.frontmatter.category}</p>
+              <h1>{entry.frontmatter.title}</h1>
+              <p class="section-copy">{entry.frontmatter.summary}</p>
+              <p class="meta-label">{entry.frontmatter.date}</p>
+            </header>
+            <article class="article-body">
+              <Content />
+            </article>
+            <a class="back-link" href={withBase("/#notes")}>
+              {lang === "zh" ? "返回思考列表" : "Back to notes"}
+            </a>
+          </main>
+        );
+      })
+    }
+  </div>
+</BaseLayout>

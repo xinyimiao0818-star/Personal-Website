@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Xinyi - Personal Archive",
+  description = "A bilingual personal archive for learning, life, experiences, and thoughts."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <script>
+      const STORAGE_KEY = "xinyi-portfolio-language";
+      const preferred = localStorage.getItem(STORAGE_KEY) || "zh";
+      const buttons = Array.from(document.querySelectorAll("[data-language-button]"));
+      const panels = Array.from(document.querySelectorAll("[data-lang-panel]"));
+      const inlineText = Array.from(document.querySelectorAll("[data-lang-text]"));
+      const sectionAnchors = Array.from(document.querySelectorAll("[data-section-anchor]"));
+
+      function applyLanguage(language: string) {
+        document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+        document.body.dataset.language = language;
+        localStorage.setItem(STORAGE_KEY, language);
+
+        buttons.forEach((button) => {
+          const isActive = button.getAttribute("data-language-button") === language;
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        panels.forEach((panel) => {
+          panel.toggleAttribute("hidden", panel.getAttribute("data-lang-panel") !== language);
+        });
+
+        inlineText.forEach((node) => {
+          node.toggleAttribute("hidden", node.getAttribute("data-lang-text") !== language);
+        });
+
+        sectionAnchors.forEach((anchor) => {
+          const section = anchor.getAttribute("data-section-anchor");
+          if (section) anchor.setAttribute("href", `#${section}-${language}`);
+        });
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyLanguage(button.getAttribute("data-language-button") || "zh");
+        });
+      });
+
+      applyLanguage(preferred);
+    </script>
+  </body>
+</html>

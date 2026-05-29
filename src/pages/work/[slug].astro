@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+type Language = "zh" | "en";
+type WorkModule = {
+  frontmatter: Record<string, any>;
+  Content: any;
+};
+type WorkArtifact = {
+  title: string;
+  type: string;
+  description: string;
+  status: string;
+  href?: string;
+};
+type WorkFrontmatter = {
+  lang: Language;
+  group: string;
+  company: string;
+  role: string;
+  period: string;
+  logo: string;
+  summary: string;
+  visibility: string;
+  sourceNote?: string;
+  publicBoundary?: string;
+  privateStatus?: string;
+  artifacts: WorkArtifact[];
+};
+
+const languages: Language[] = ["zh", "en"];
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const withBase = (path: string) => `${base}${path.replace(/^\//, "")}`;
+
+export function getStaticPaths() {
+  const workModules = Object.values(
+    import.meta.glob<WorkModule>("../../content/work/*.md", { eager: true })
+  );
+  const grouped = workModules.reduce<Record<string, WorkModule[]>>((acc, work) => {
+    const slug = work.frontmatter.group;
+    acc[slug] = acc[slug] || [];
+    acc[slug].push(work);
+    return acc;
+  }, {});
+
+  return Object.entries(grouped).map(([slug, entries]) => ({
+    params: { slug },
+    props: { entries }
+  }));
+}
+
+const { entries } = Astro.props as { entries: WorkModule[] };
+const entriesByLang = Object.fromEntries(
+  entries.map((entry) => [entry.frontmatter.lang, entry])
+) as Record<Language, WorkModule>;
+const primary = entriesByLang.zh ?? entriesByLang.en;
+---
+
+<BaseLayout title={`${primary.frontmatter.company} Archive - Xinyi`}>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href={withBase("/")}>Xinyi Miao</a>
+      <nav class="nav" aria-label="Work archive navigation">
+        <a href={withBase("/#internships-zh")} data-section-anchor="internships">
+          <span data-lang-text="zh">实习</span>
+          <span data-lang-text="en" hidden>Internships</span>
+        </a>
+        <a href={withBase("/#campus-zh")} data-section-anchor="campus">
+          <span data-lang-text="zh">校园</span>
+          <span data-lang-text="en" hidden>Campus</span>
+        </a>
+        <a href={withBase("/#contact-zh")} data-section-anchor="contact">
+          <span data-lang-text="zh">联系</span>
+          <span data-lang-text="en" hidden>Contact</span>
+        </a>
+      </nav>
+      <div class="language-toggle" aria-label="Language">
+        <button type="button" data-language-button="zh" aria-pressed="true">中</button>
+        <button type="button" data-language-button="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    {
+      languages.map((lang) => {
+        const entry = entriesByLang[lang] ?? primary;
+        const Content = entry.Content;
+        const frontmatter = entry.frontmatter as WorkFrontmatter;
+        const artifacts = frontmatter.artifacts;
+        const isCampusArchive = ["bain-cup", "news-society"].includes(frontmatter.group);
+        const backSection = isCampusArchive ? "campus" : "internships";
+        const backLabel =
+          lang === "zh"
+            ? isCampusArchive ? "返回校园项目" : "返回实习列表"
+            : isCampusArchive ? "Back to campus projects" : "Back to internships";
+        const boundaryItems = [
+          frontmatter.sourceNote && { label: lang === "zh" ? "资料来源" : "Source", value: frontmatter.sourceNote },
+          frontmatter.publicBoundary && { label: lang === "zh" ? "公开边界" : "Public boundary", value: frontmatter.publicBoundary },
+          frontmatter.privateStatus && { label: lang === "zh" ? "私有状态" : "Private status", value: frontmatter.privateStatus }
+        ].filter(Boolean) as { label: string; value: string }[];
+        return (
+          <main class="work-article" data-lang-panel={lang} hidden={lang !== "zh"}>
+            <header class="work-header">
+              <div class="work-logo-panel">
+                <img src={withBase(frontmatter.logo)} alt={`${frontmatter.company} logo`} />
+              </div>
+              <div>
+                <p class="eyebrow">{frontmatter.visibility}</p>
+                <h1>{frontmatter.company}</h1>
+                <p class="section-copy">{frontmatter.summary}</p>
+                <p class="archive-meta">{frontmatter.period} / {frontmatter.role}</p>
+              </div>
+            </header>
+
+            {boundaryItems.length > 0 && (
+              <section class="work-boundary" aria-label="Archive privacy boundary">
+                {boundaryItems.map((item) => (
+                  <div>
+                    <span>{item.label}</span>
+                    <p>{item.value}</p>
+                  </div>
+                ))}
+              </section>
+            )}
+
+            <section class="work-artifacts" aria-label="Archive artifacts">
+              {artifacts.map((artifact, index) => (
+                <article class="artifact-card">
+                  <span class="fit-index">0{index + 1}</span>
+                  <p class="meta-label">{artifact.type}</p>
+                  <h2>{artifact.title}</h2>
+                  <p>{artifact.description}</p>
+                  {artifact.href ? (
+                    <a class="archive-link" href={withBase(artifact.href)}>{artifact.status}</a>
+                  ) : (
+                    <span class="artifact-status">{artifact.status}</span>
+                  )}
+                </article>
+              ))}
+            </section>
+
+            <article class="article-body work-body">
+              <Content />
+            </article>
+
+            <a class="back-link" href={withBase(`/#${backSection}-${lang}`)}>
+              {backLabel}
+            </a>
+          </main>
+        );
+      })
+    }
+  </div>
+</BaseLayout>

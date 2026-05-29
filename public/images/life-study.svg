@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Study desk placeholder</title>
+  <desc id="desc">Warm abstract photo placeholder inspired by desk, books, and notes.</desc>
+  <defs>
+    <linearGradient id="desk" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff6e8"/>
+      <stop offset=".62" stop-color="#c94b3c"/>
+      <stop offset="1" stop-color="#211312"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 .12"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="900" height="620" fill="url(#desk)"/>
+  <rect x="112" y="92" width="290" height="396" rx="8" fill="#fffaf0" opacity=".78" transform="rotate(-5 257 290)"/>
+  <rect x="482" y="118" width="254" height="342" rx="10" fill="#2b1815" opacity=".44" transform="rotate(7 609 289)"/>
+  <path d="M174 185 H340 M158 247 H350 M151 309 H315 M527 208 H687 M520 270 H684 M522 332 H642" stroke="#8d2928" stroke-width="8" stroke-opacity=".36"/>
+  <circle cx="716" cy="462" r="74" fill="#ffd397" opacity=".62"/>
+  <rect width="900" height="620" filter="url(#grain)"/>
+</svg>
